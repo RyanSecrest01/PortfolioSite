@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+            background-color: #262626;
+        }
+
+        div.box {
+            background: #262626;
+            height: 100vh;
+            width: 100%;
+            position: relative;
+			z-index: 1;
+        }
+
+        div.div1 {
+            background: linear-gradient(to top, #594F4F, #547980);
+            float: left;
+            height: 100%;
+            width: 50%;
+            transition: width 1s ease-in-out;
+            clear: both;
+        }
+
+        div.div2 {
+            background: linear-gradient(to top, #594F4F, #547980);
+            height: 100%;
+            width: 50%;
+            transition: width 1s ease-in-out;
+            position: absolute;
+            right: 0;
+        }
+
+        hr {
+            transform: rotate(90deg);
+            position: absolute;
+            top: 49%;
+            left: 37.5%;
+            width: 0%;
+            border: 0;
+            height: 10px;
+            filter: drop-shadow(0px 1px 5px #45ADA8);
+            background-color: #45ADA8;
+            transition: transform 1s ease-in-out, width 1s ease-in-out;
+			z-index: 10;
+        }
+
+        button {
+            position: absolute;
+            top: 51.2%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: drop-shadow(0px 1px 15px #45ADA8);
+            background-color: #45ADA8;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            border-width: 0px;
+            transition: transform 1s ease-in-out;
+			z-index: 10;
+			transform-origin: center;
+        }
+
+        .container {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+			opacity: 0;
+			transition: opacity 1s ease-in-out;
+			z-index: 3;
+        }
+
+        .portfolio {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .portfolio-item {
+            background-color: #ffffff;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .portfolio-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-description {
+            font-size: 16px;
+            color: #6c757d;
+        }
+		
+		.button-scale {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			filter: drop-shadow(0px 1px 15px #45ADA8);
+			background-color: #45ADA8;
+			border-radius: 50%;
+			width: 150px;
+			height: 150px;
+			cursor: pointer;
+			border-width: 0px;
+			animation-name: button-scale;
+			animation-duration: 1s;
+			animation-timing-function: ease-in-out;
+			animation-iteration-count: infinite;
+			}
+			
+		@keyframes button-scale {
+			0% {
+				transform: translate(-50%, -50%) scale(1);
+			}
+			50% {
+				transform: translate(-50%, -50%) scale(1.2);
+			}
+			100% {
+				transform: translate(-50%, -50%) scale(1);
+			}
+		}
+
+		.mobile-warning {
+			display: none;
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 16px;
+			font-weight: bold;
+			color: #333333;
+			text-align: center;
+			z-index: 3;
+			transition: opacity 1s ease-in-out;
+		}
+		
+		.modal {
+			display: none; /* Hide the modal by default */
+			position: fixed; /* Position the modal */
+			z-index: 999; /* Make sure it appears on top of other elements */
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto; /* Enable scrolling if the content is too long */
+			background-color: rgba(0,0,0,0.5); /* Add a semi-transparent background color */
+		}
+		
+		.modal-content {
+			background-color: white;
+			margin: 15% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			max-width: 600px;
+		}
+		
+		.close {
+			color: #aaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+		
+		.close:hover,
+		.close:focus {
+			color: black;
+			text-decoration: none;
+			cursor: pointer;
+		}
+		
+		#badgeButton:hover {
+			background-color: #357ae8;
+		}
+		
+		.hidden {
+			opacity: 0;
+			position: absolute;
+			top: 100%;
+			left: 0;
+		}
+
+		.code .card-body {
+			font-family: 'Courier New', Courier, monospace;
+			background-color: #1e1e1e;
+			color: #f8f8f8;
+			padding: 1.5rem;
+			}
+			
+		.code .card-title {
+			color: #ff9800;
+		}
+			
+		.code .card-text {
+			color: #f8f8f8;
+		}
+			
+			.code .close {
+			color: #f8f8f8;
+		}
+
+		.footer {
+			position: relative;
+			height: 100px;
+			margin-top: -100px;
+			clear: both;
+			background-color: #333;
+			color: #fff;
+		}
+
+		.footer p {
+			text-align: center;
+			line-height: 100px;
+			margin: 0;
+			color: #ffffff;
+		}
+		
+		.wrapper {
+			min-height: 100%;
+			/* Equal to footer height */
+			margin-bottom: -60px;
+		}
+		
+    </style>
+	
+	<script>
+		function someFunc() {
+			changeColor();
+            hideElements();
+			splitDivs();
+		}
+	
+        function changeColor() {
+            var line = document.getElementById("line");
+
+            line.style.width = "0%";
+            line.style.transition = "width 1s ease-in-out";
+            line.style.marginLeft = "50%";
+
+            var intervalId = setInterval(function() {
+                var currentWidth = parseInt(line.style.width);
+                if (currentWidth >= 50) {
+                    clearInterval(intervalId);
+                } else {
+                    line.style.width = (currentWidth + 10) + "%";
+                    line.style.marginLeft = (parseInt(line.style.marginLeft) - 5) + "%";
+                }
+            }, 100);
+
+            line.style.position = "absolute";
+            line.style.left = "0";
+            line.style.transition = "background-color 1s ease-in-out";
+            line.style.backgroundColor = "#9DE0AD";
+            line.style.filter = "drop-shadow(0px 1px 5px #9DE0AD)";
+
+            var button1 = document.getElementById("button1");
+            button1.style.transition = "background-color 1s ease-in-out";
+            button1.style.backgroundColor = "#9DE0AD";
+            button1.style.filter = "drop-shadow(0px 1px 5px #9DE0AD)";
+        }
+
+        function hideElements() {
+			setTimeout(() => {
+				var button1 = document.getElementById("button1");
+				button1.classList.add("hidden");
+				var line = document.getElementById("line");
+				line.style.display = 'none';
+			}, 1000);
+		}
+
+
+
+        function splitDivs() {
+            setTimeout(() => {
+                var div1 = document.querySelector('.div1');
+                var div2 = document.querySelector('.div2');
+                
+                div1.style.borderRight = "5px solid #9DE0AD";
+                div2.style.borderLeft = "5px solid #9DE0AD";
+
+                div1.style.filter = "drop-shadow(3px 0px 5px #9DE0AD)";
+                div2.style.filter = "drop-shadow(-3px 0px 5px #9DE0AD)";
+
+                div1.style.width = "0%";
+                div2.style.width = "0%";
+
+                div2.style.height = "100%";
+                div2.style.visibility = "visible";
+
+                var container = document.querySelector('.container');
+                container.style.display = '';
+
+                showContainer();
+				showMobileWarning();
+            }, 1000);
+        } 
+
+		function showMobileWarning() {
+			var mobileWarning = document.querySelector('.mobile-warning');
+			mobileWarning.style.display = "block";
+			mobileWarning.style.opacity = 0;
+			var intervalId = setInterval(function() {
+				var currentOpacity = parseFloat(mobileWarning.style.opacity);
+				if (currentOpacity >= 1) {
+				clearInterval(intervalId);
+				} else {
+				mobileWarning.style.opacity = currentOpacity + 0.1;
+				}
+			}, 100);
+		}
+		
+        function showContainer() {
+			var container = document.querySelector('.container');
+			container.style.opacity = 0;
+			container.style.display = "block";
+			var intervalId = setInterval(function() {
+				var currentOpacity = parseFloat(container.style.opacity);
+				if (currentOpacity >= 1) {
+				clearInterval(intervalId);
+				} else {
+				container.style.opacity = currentOpacity + 0.1;
+				}
+			}, 100);
+		}
+
+		function showCalendar() {
+            var iframe = document.createElement('iframe');
+            iframe.setAttribute('src', 'https://calendar.google.com/calendar/embed?height=600&wkst=2&bgcolor=%23ffffff&ctz=America%2FLos_Angeles&mode=WEEK&src=cnNlY3Jlc3QyMkBnbWFpbC5jb20&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4udXNhI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%2333B679&color=%230B8043');
+            iframe.setAttribute('width', '100%');
+            iframe.setAttribute('height', '600');
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('scrolling', 'no');
+            var container = document.createElement('div');
+            container.setAttribute('class', 'calendar-container');
+            container.appendChild(iframe);
+            var button = document.getElementById('calendarButton');
+            button.parentNode.replaceChild(container, button);
+        }
+		
+		function showInfo() {
+			// create a new div element for the info container
+			var container = document.createElement('div');
+			container.setAttribute('class', 'info-container card code');
+		
+			// create the card body with your personal information
+			var cardBody = document.createElement('div');
+			cardBody.setAttribute('class', 'card-body');
+		
+			var closeButton = document.createElement('button');
+			closeButton.setAttribute('type', 'button');
+			closeButton.setAttribute('class', 'close');
+			closeButton.setAttribute('onclick', 'removeInfoContainer();');
+			closeButton.innerHTML = '&times;';
+			closeButton.style.border = 'none';
+		
+		
+			var title = document.createElement('h1');
+			title.setAttribute('class', 'card-title');
+			title.innerHTML = 'WSU Student';
+		
+			var name = document.createElement('p');
+			name.setAttribute('class', 'card-text');
+			name.innerHTML = 'Name: Ryan C Secrest';
+		
+			var email = document.createElement('p');
+			email.setAttribute('class', 'card-text');
+			email.innerHTML = 'Email: rsecrest22@gmail.com';
+		
+			var phone = document.createElement('p');
+			phone.setAttribute('class', 'card-text');
+			phone.innerHTML = 'Phone: (606) 923-9576';
+		
+			// add the card body elements to the container
+			cardBody.appendChild(closeButton);
+			cardBody.appendChild(title);
+			cardBody.appendChild(name);
+			cardBody.appendChild(email);
+			cardBody.appendChild(phone);
+			container.appendChild(cardBody);
+		
+			// add the close button to the top right corner
+			closeButton.style.position = 'absolute';
+			closeButton.style.top = '0';
+			closeButton.style.right = '0';
+		
+			// replace the badgeButton with the info container
+			var badgeButton = document.getElementById('badgeButton');
+			badgeButton.parentNode.insertBefore(container, badgeButton.nextSibling);
+			badgeButton.style.display = 'none';
+		
+			// add a reference to the badge button in the container element
+			container.setAttribute('data-badge-button', badgeButton.id);
+		}
+
+		// function to remove the info container and show the badge button again
+		function removeInfoContainer() {
+			var infoContainer = document.querySelector('.info-container');
+			var badgeButtonId = infoContainer.getAttribute('data-badge-button');
+			var badgeButton = document.getElementById(badgeButtonId);
+			badgeButton.style.display = 'inline-block';
+			infoContainer.parentNode.removeChild(infoContainer);
+		}
+
+    </script>
+	
+	 <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-4lRDd3+3GGJITPvS0RW7VdZD+QG5H5SpJFQX+VFlg5a5tuAswHfszK39Jg/u/94xMJK1Hl+ypvAZlEnlZbF0Eg==" crossorigin="anonymous" />
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+		<script src="https://kit.fontawesome.com/b3e1e01249.js" crossorigin="anonymous"></script>
+		<!-- Bootstrap JS -->
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+		
+</head>
+
+<body>
+    <div class="box">
+        <div class="div1"></div>
+        <div class="div2"></div>
+    </div>
+
+    <hr id="line">
+
+    <button id="button1" onclick="someFunc()" class="button-scale"></button>
+
+    <div class="mobile-warning">
+        <p class="text-center text-white mb-5">Mobile compatibility in progress</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 col-md-3">
+                <button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='https://github.com/RyanSecrest01'">
+                    <i class="fab fa-github fa-6x"></i>
+                </button>
+            </div>
+
+            <div class="col-sm-3 col-md-3">
+                <button id="badgeButton" onclick="showInfo()" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-id-badge fa-6x"></i>
+                </button>
+            </div>
+
+            <div class="col-sm-3 col-md-3">
+                <button id="calendarButton" onclick="showCalendar()" ontouchstart="showCalendar()" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-calendar-days fa-6x"></i>
+                </button>
+            </div>
+
+            <div class="col-sm-3 col-md-3">
+                <button id="formButton" onclick="showForm()" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-envelope fa-6x"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+	<div id="formContainer" class="container" style="display:none;">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">Contact Me</div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email address:</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message:</label>
+                                <textarea class="form-control" rows="5" id="message"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="close" onclick="hideForm()">&times;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script>
+		const mailButton = document.getElementById("formButton");
+		const formContainer = document.getElementById("formContainer");
+		const submitButton = document.createElement("button");
+	
+		function showForm() {
+			mailButton.style.display = "none";
+			submitButton.innerHTML = "Submit";
+			submitButton.id = "submit-button";
+			submitButton.classList.add("btn", "btn-primary", "btn-lg");
+			mailButton.parentNode.insertBefore(submitButton, mailButton.nextSibling);
+			formContainer.style.display = "block";
+		}
+	
+		function hideForm() {
+			mailButton.style.display = "block";
+			submitButton.parentNode.removeChild(submitButton);
+			formContainer.style.display = "none";
+		}
+	</script>
+
+	
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Ryan Secrest. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+
+
+
+
+</html>
+		
+	
